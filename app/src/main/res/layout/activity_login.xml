@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Login">
+
+    <EditText
+        android:id="@+id/login_username"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/input"
+        android:elevation="10dp"
+        android:gravity="center"
+        android:padding="10dp"
+        android:shadowColor="@color/black"
+        tools:layout_editor_absoluteX="93dp"
+        tools:layout_editor_absoluteY="326dp" />
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/icon"
+        tools:layout_editor_absoluteX="143dp"
+        tools:layout_editor_absoluteY="150dp" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
