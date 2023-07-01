@@ -30,6 +30,7 @@
         android:elevation="10dp"
         android:gravity="center"
         android:hint="Password"
+        android:inputType="textPassword"
         android:padding="10dp"
         android:shadowColor="@color/black"
         app:layout_constraintBottom_toBottomOf="parent"
