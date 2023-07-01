@@ -54,23 +54,26 @@
         android:layout_height="wrap_content"
         android:background="@drawable/button"
         android:elevation="10dp"
+        android:padding="10dp"
         android:gravity="center"
         android:shadowColor="@color/black"
         android:text="LOGIN"
         android:textColor="@color/black"
         android:textSize="20dp"
+        android:onClick="checkValidate"
         app:backgroundTint="@color/buttonColour"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/login_password"
-        app:layout_constraintVertical_bias="0.123" />
+        app:layout_constraintVertical_bias="0.123"
+        />
 
 
     <CheckBox
         android:id="@+id/checkBox"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="48dp"
         android:layout_marginStart="28dp"
         android:layout_marginTop="110dp"
         android:scaleX="1"
@@ -80,7 +83,6 @@
         app:layout_constraintEnd_toStartOf="@+id/forget_pass"
         app:layout_constraintHorizontal_bias="0.102"
         app:layout_constraintStart_toStartOf="parent"
-
         app:layout_constraintTop_toBottomOf="@+id/login_password"
         app:layout_constraintVertical_bias="0.086" />
 
