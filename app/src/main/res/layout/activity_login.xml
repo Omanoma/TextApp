@@ -60,7 +60,7 @@
         android:text="LOGIN"
         android:textColor="@color/black"
         android:textSize="20dp"
-        android:onClick="checkValidate"
+        android:onClick="ValidateOrAdd"
         app:backgroundTint="@color/buttonColour"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -108,23 +108,29 @@
         android:layout_marginStart="36dp"
         android:text="New User?"
         android:textSize="15sp"
+        android:padding="15dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/checkBox"
         app:layout_constraintVertical_bias="0.196" />
 
     <TextView
-        android:id="@+id/ChangeSignUp"
+        android:id="@+id/signUpLink"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:text="Get Started"
         android:textColor="@color/linkColour"
         android:textSize="15sp"
+        android:onClick="changeSignUp"
+        android:clickable="true"
+        android:focusable="true"
+        android:padding="15dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toEndOf="@+id/textView2"
         app:layout_constraintTop_toBottomOf="@+id/checkBox"
-        app:layout_constraintVertical_bias="0.196" />
+        app:layout_constraintVertical_bias="0.196"
+         />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -106,6 +106,7 @@
         android:text="Sign Up"
         android:textColor="@color/black"
         android:textSize="20dp"
+        android:onClick="ValidateOrAdd"
         app:backgroundTint="@color/buttonColour"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -125,17 +126,21 @@
         app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
-        android:id="@+id/textViewS3"
+        android:id="@+id/LoginLink"
         android:layout_width="wrap_content"
         android:layout_height="48dp"
         android:layout_marginEnd="132dp"
         android:layout_marginBottom="84dp"
         android:gravity="center"
         android:text=" Login in"
+        android:onClick="changeLogin"
+        android:clickable="true"
         android:textColor="@color/linkColour"
+        android:padding="15dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toEndOf="@+id/textViewS2" />
+        app:layout_constraintStart_toEndOf="@+id/textViewS2"
+        android:focusable="true" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
