@@ -1,12 +1,14 @@
 package com.example.splash;
 
+import static io.grpc.okhttp.internal.Platform.logger;
+
 import android.os.Build;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.gms.tasks.TaskCompletionSource;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
@@ -19,11 +21,13 @@ public class User {
     String password;
     String email;
     LocalDate date;
+    boolean ab;
     FirebaseFirestore db;
     public User(String username, String password, String email) {
         this.username = username;
         this.password = password;
         this.email = email;
+        db = FirebaseFirestore.getInstance();
         CreatedDate();
     }
     public User(String username,String password){
@@ -49,8 +53,10 @@ public class User {
         return a;
     }
     public boolean SamePass(String a){
-        if(password.equals(a))return true;
-        return false;
+        logger.info(a+" "+password);
+        System.out.println(password.compareTo(a) == 0);
+        System.out.println(password.compareTo(a));
+        return password.compareTo(a) == 0;
     }
     public boolean validateUserOrPass(){
         final boolean [] a = {false};
@@ -58,7 +64,7 @@ public class User {
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                 if(task.isSuccessful()){
-                    if(SamePass(task.getResult().get("Password").toString())){
+                       if(SamePass(task.getResult().get("Password").toString())){
                         a[0] = true;
                     }
                 }
@@ -67,33 +73,40 @@ public class User {
         return a[0];
     }
 
-    public boolean checkEmail(){
-        final boolean[] a = {true};
+    public Task<Boolean> checkEmail() {
+        final TaskCompletionSource<Boolean> taskCompletionSource = new TaskCompletionSource<>();
         db.collection("EmailList").document(email).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                if(task.isSuccessful()){
-                    a[0] = false;
+                if (task.isSuccessful()) {
+                    boolean exists = task.getResult().exists();
+                    taskCompletionSource.setResult(!exists);
+                } else {
+                    taskCompletionSource.setException(task.getException());
                 }
             }
         });
-        return a[0];
+        return taskCompletionSource.getTask();
     }
-    public boolean checkUser(){
-        final boolean[] a = {true};
+
+    public Task<Boolean> checkUser(){
+        final TaskCompletionSource<Boolean> taskCompletionSource = new TaskCompletionSource<>();
         db.collection("userInfo").document(username).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                if(task.isSuccessful()){
-                    a[0] = false;
+                if (task.isSuccessful()) {
+                    boolean exists = task.getResult().exists();
+                    taskCompletionSource.setResult(!exists);
+                } else {
+                    taskCompletionSource.setException(task.getException());
                 }
             }
         });
-        return a[0];
+        return taskCompletionSource.getTask();
     }
     public void addToDatabase(){
         db.collection("userInfo").document(username).set(TurnToHash());
-        db.collection("EmailList").document(username).set(EmailToHash());
+        db.collection("EmailList").document(email).set(EmailToHash());
     }
 
 }

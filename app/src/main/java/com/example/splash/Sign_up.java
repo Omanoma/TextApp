@@ -38,8 +38,8 @@ public class Sign_up extends AppCompatActivity {
         String u = user.getText().toString();
         String rp = repass.getText().toString();
         User a = new User(u,p,e);
-        if(!a.checkUser()) Toast.makeText(Sign_up.this,"User Not correct",Toast.LENGTH_LONG).show();
-        else if(!a.checkEmail())  Toast.makeText(Sign_up.this,"Email Not correct",Toast.LENGTH_LONG).show();
+        if(!a.checkUser().isSuccessful()) Toast.makeText(Sign_up.this,"User Not correct",Toast.LENGTH_LONG).show();
+        else if(!a.checkEmail().isSuccessful())  Toast.makeText(Sign_up.this,"Email Not correct",Toast.LENGTH_LONG).show();
         else if(a.SamePass(rp) == false) Toast.makeText(Sign_up.this,"Password Not correct",Toast.LENGTH_LONG).show();
         else{ a.addToDatabase();
             Toast.makeText(Sign_up.this,"Password correct",Toast.LENGTH_LONG).show();
