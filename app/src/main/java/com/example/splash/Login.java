@@ -37,7 +37,7 @@ public class Login extends AppCompatActivity {
         String user = username.getText().toString();
         String pass = password.getText().toString();
         User a = new User(user,pass);
-        String statement = (a.validateUserOrPass())? "Correct Username & Password" : "Incorrect Username & Password";
+        String statement = (a.validateUserOrPass()).isSuccessful()? "Correct Username & Password" : "Incorrect Username & Password";
         Toast.makeText(Login.this,statement,Toast.LENGTH_LONG);
     }
     public void changeSignUp(View v){

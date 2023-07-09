@@ -23,7 +23,6 @@ public class User {
     String password;
     String email;
     LocalDate date;
-    boolean ab;
     FirebaseFirestore db;
     public User(String username, String password, String email) {
         this.username = username;
@@ -56,27 +55,29 @@ public class User {
     }
     public boolean SamePass(String a){
         logger.info(a+" "+password);
-        System.out.println(password.compareTo(a) == 0);
-        System.out.println(password.compareTo(a));
-        return password.compareTo(a) == 0;
+        return password.compareTo(a) == 0 && Regex(label.PASSWORD);
     }
-    public boolean validateUserOrPass(){
-        final boolean [] a = {false};
+    public Task<Boolean> validateUserOrPass(){
+        final TaskCompletionSource<Boolean> taskCompletionSource = new TaskCompletionSource<>();
         db.collection("userInfo").document(username).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                 if(task.isSuccessful()){
                        if(SamePass(task.getResult().get("Password").toString())){
-                        a[0] = true;
+                           taskCompletionSource.setResult(true);
                     }
                 }
             }
         });
-        return a[0];
+        return taskCompletionSource.getTask();
     }
 
     public Task<Boolean> checkEmail() {
         final TaskCompletionSource<Boolean> taskCompletionSource = new TaskCompletionSource<>();
+        if(!Regex(label.EMAIL)){
+            taskCompletionSource.setResult(false);
+            return taskCompletionSource.getTask();
+        }
         db.collection("EmailList").document(email).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
@@ -93,7 +94,10 @@ public class User {
 
     public Task<Boolean> checkUser(){
         final TaskCompletionSource<Boolean> taskCompletionSource = new TaskCompletionSource<>();
-
+        if(!Regex(label.USERNAME)){
+            taskCompletionSource.setResult(false);
+            return taskCompletionSource.getTask();
+        }
         db.collection("userInfo").document(username).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
