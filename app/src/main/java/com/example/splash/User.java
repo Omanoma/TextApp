@@ -15,6 +15,8 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class User {
     String username;
@@ -91,6 +93,7 @@ public class User {
 
     public Task<Boolean> checkUser(){
         final TaskCompletionSource<Boolean> taskCompletionSource = new TaskCompletionSource<>();
+
         db.collection("userInfo").document(username).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
@@ -107,6 +110,31 @@ public class User {
     public void addToDatabase(){
         db.collection("userInfo").document(username).set(TurnToHash());
         db.collection("EmailList").document(email).set(EmailToHash());
+    }
+    public boolean Regex(@NonNull label a){
+        String pattern = "";
+        Matcher m = null;
+        if(a.equals(label.EMAIL)) {
+            pattern = "^[a-zA-Z0-9]+@[a-zA-Z]+/.[a-z]+$";
+            Pattern p = Pattern.compile(pattern);
+            m = p.matcher(email);
+        }
+        else if(a.equals(label.PASSWORD)){
+            pattern ="^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9]).{6,}$";
+            Pattern p = Pattern.compile(pattern);
+            m = p.matcher(password);
+        }
+        else if(a.equals(label.USERNAME)){
+            pattern ="^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9]).{6,}$";
+            Pattern p = Pattern.compile(pattern);
+            m = p.matcher(username);
+        }
+        return m.matches();
+    }
+    enum label{
+        PASSWORD,
+        USERNAME,
+        EMAIL
     }
 
 }
