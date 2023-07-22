@@ -24,6 +24,7 @@ public class User {
     String email;
     LocalDate date;
     FirebaseFirestore db;
+    int image;
     public User(String username, String password, String email) {
         this.username = username;
         this.password = password;
@@ -37,7 +38,7 @@ public class User {
     }
     private void CreatedDate(){
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            date =  LocalDate.now();;
+            date =  LocalDate.now();
         }
     }
     public Map<String,Object> TurnToHash(){
@@ -135,6 +136,12 @@ public class User {
         }
         return m.matches();
     }
+
+    public int getImage() {
+        return image;
+    }
+
+
     enum label{
         PASSWORD,
         USERNAME,
