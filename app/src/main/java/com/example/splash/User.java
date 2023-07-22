@@ -9,12 +9,16 @@ import androidx.annotation.NonNull;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.TaskCompletionSource;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -24,12 +28,14 @@ public class User {
     String email;
     LocalDate date;
     FirebaseFirestore db;
+    FirebaseAuth auth;
     int image;
     public User(String username, String password, String email) {
         this.username = username;
         this.password = password;
         this.email = email;
         db = FirebaseFirestore.getInstance();
+        auth = FirebaseAuth.getInstance();
         CreatedDate();
     }
     public User(String username,String password){
@@ -86,7 +92,7 @@ public class User {
                     boolean exists = task.getResult().exists();
                     taskCompletionSource.setResult(!exists);
                 } else {
-                    taskCompletionSource.setException(task.getException());
+                    taskCompletionSource.setException(Objects.requireNonNull(task.getException()));
                 }
             }
         });
@@ -106,7 +112,7 @@ public class User {
                     boolean exists = task.getResult().exists();
                     taskCompletionSource.setResult(!exists);
                 } else {
-                    taskCompletionSource.setException(task.getException());
+                    taskCompletionSource.setException(Objects.requireNonNull(task.getException()));
                 }
             }
         });
@@ -115,6 +121,17 @@ public class User {
     public void addToDatabase(){
         db.collection("userInfo").document(username).set(TurnToHash());
         db.collection("EmailList").document(email).set(EmailToHash());
+        auth.createUserWithEmailAndPassword(email,password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+            @Override
+            public void onComplete(@NonNull Task<AuthResult> task) {
+                if(task.isSuccessful()){
+                    FirebaseUser a = auth.getCurrentUser();
+                    assert a != null;
+                    logger.info(a.getEmail());
+                    a.sendEmailVerification();
+                }
+            }
+        });
     }
     public boolean Regex(@NonNull label a){
         String pattern = "";

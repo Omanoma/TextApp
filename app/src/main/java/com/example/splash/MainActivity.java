@@ -1,6 +1,7 @@
 package com.example.splash;
 
-import static java.lang.Thread.sleep;
+
+//import static io.grpc.okhttp.internal.Platform.logger;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -20,13 +21,17 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        System.out.println(R.mipmap.face1 + " OZIOMA FACE1");
+        System.out.println(R.mipmap.face2 + " OZIOMA FACE2");
+        System.out.println(R.mipmap.face3 + " OZIOMA FACE3");
+        System.out.println(R.mipmap.face4 + " OZIOMA FACE4");
         handler = new Handler();
         intent = new Intent(this,Login.class);
         ImageView = findViewById(R.id.face1);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,WindowManager.LayoutParams.FLAG_FULLSCREEN);
         rAnimation();
         handler.postDelayed(() -> setContentView(R.layout.splash2),3000);
-        handler.postDelayed(() -> changeActivity(),3500);
+        handler.postDelayed(this::changeActivity,3500);
 
     }
     private void rAnimation(){
