@@ -11,13 +11,14 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class CardList_Adapter extends RecyclerView.Adapter<CardList_Adapter.MyViewHolder>{
     Context context;
-    ArrayList<User> a;
+    List<User> a;
 
-    public CardList_Adapter(Context con, ArrayList<User> a){
-        this.context = context;
+    public CardList_Adapter(Context con, List<User> a){
+        this.context = con;
         this.a = a;
     }
 
@@ -37,7 +38,7 @@ public class CardList_Adapter extends RecyclerView.Adapter<CardList_Adapter.MyVi
 
     @Override
     public int getItemCount() {
-        return a.size();
+        return 3;
     }
     public static class MyViewHolder extends RecyclerView.ViewHolder{
         ImageView icon;
