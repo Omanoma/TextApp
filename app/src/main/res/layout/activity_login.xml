@@ -60,7 +60,7 @@
         android:text="LOGIN"
         android:textColor="@color/black"
         android:textSize="20dp"
-        android:onClick="ValidateOrAdd"
+        android:onClick="checkValidate"
         app:backgroundTint="@color/buttonColour"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

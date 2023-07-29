@@ -1,23 +1,17 @@
 package com.example.splash;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.google.firebase.firestore.QuerySnapshot;
 
-
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.atomic.AtomicReference;
 
 
 public class Login extends AppCompatActivity {
@@ -37,11 +31,29 @@ public class Login extends AppCompatActivity {
         String user = username.getText().toString();
         String pass = password.getText().toString();
         User a = new User(user,pass);
-        String statement = (a.validateUserOrPass()).isSuccessful()? "Correct Username & Password" : "Incorrect Username & Password";
-        Toast.makeText(Login.this,statement,Toast.LENGTH_LONG);
+        CompletableFuture<Boolean> h = (a.validateUserOrPass());
+        System.out.println(h+" PIE");
+        AtomicReference<String> statement = new AtomicReference<>("");
+        h.thenAccept(isValid -> {
+            if (isValid) {
+                statement.set("User validation successful.");
+                Toast.makeText(Login.this, statement.get(),Toast.LENGTH_LONG).show();//changeContactList();
+                System.out.println("User validation successful.");
+            } else {
+                statement.set("User validation failed.");
+                System.out.println("User validation failed.");
+                Toast.makeText(Login.this, statement.get(),Toast.LENGTH_LONG).show();//changeContactList();
+
+            }
+        });
+
     }
     public void changeSignUp(View v){
         Intent in = new Intent(this,Sign_up.class);
+        startActivity(in);
+    }
+    public void changeContactList(){
+        Intent in = new Intent(this, Contact_List.class);
         startActivity(in);
     }
 
