@@ -5,11 +5,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginTop="40dp"
-    android:layout_marginBottom="40dp">
+    android:paddingStart="12dp"
+    android:paddingBottom="12dp"
+    android:layout_marginTop="4dp"
+    android:layout_marginBottom="4dp">
 
     <androidx.cardview.widget.CardView
-        android:layout_width="409dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -24,7 +26,7 @@
             <ImageView
                 android:id="@+id/imageView"
                 android:layout_width="100dp"
-                android:layout_height="102dp"
+                android:layout_height="match_parent"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"

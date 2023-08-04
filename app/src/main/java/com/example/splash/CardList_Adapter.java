@@ -38,7 +38,7 @@ public class CardList_Adapter extends RecyclerView.Adapter<CardList_Adapter.MyVi
 
     @Override
     public int getItemCount() {
-        return 3;
+        return a.size();
     }
     public static class MyViewHolder extends RecyclerView.ViewHolder{
         ImageView icon;
