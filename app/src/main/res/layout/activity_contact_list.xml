@@ -5,8 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:paddingTop="25dp"
-    android:paddingStart="5dp"
-    android:paddingEnd="5dp"
+
     tools:context=".Contact_List">
 
     <EditText
@@ -60,56 +59,14 @@
         app:layout_constraintTop_toBottomOf="@+id/editText"
         tools:ignore="TextSizeCheck" />
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="70dp"
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:layout_width="477dp"
+        android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
         android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true"
-        android:layout_marginStart="7dp"
-        android:layout_marginEnd="3dp"
-        android:layout_marginBottom="6dp"
-        android:gravity="center"
-        android:background="@drawable/input2"
-        android:elevation="10dp"
-        app:orientation="horizontal">
-
-        <ImageButton
-            android:id="@+id/imageButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@color/white"
-            android:contentDescription="Message"
-            android:src="@drawable/message"
-            tools:ignore="ImageContrastCheck,TouchTargetSizeCheck" />
-
-        <View
-            android:id="@+id/view2"
-            android:layout_width="65dip"
-            android:layout_height="wrap_content" />
-
-        <ImageButton
-            android:id="@+id/imageButton2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@drawable/contact_"
-            android:contentDescription="Contact"
-            android:src="@drawable/contact_"
-            tools:ignore="TouchTargetSizeCheck" />
-
-        <View
-            android:id="@+id/view3"
-            android:layout_width="65dip"
-            android:layout_height="wrap_content" />
-
-        <ImageButton
-            android:id="@+id/imageButton3"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@drawable/setting"
-            android:contentDescription="Setting"
-            android:src="@drawable/setting"
-            app:layout_row="0"
-            tools:ignore="ImageContrastCheck,TouchTargetSizeCheck" />
-    </LinearLayout>
+        android:layout_marginStart="-14dp"
+        android:layout_marginEnd="0dp"
+        app:menu="@menu/bottom_menu"
+        />
 </RelativeLayout>
