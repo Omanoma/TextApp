@@ -4,60 +4,21 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingTop="25dp"
-
     tools:context=".Contact_List">
 
-    <EditText
-        android:id="@+id/editText"
-        android:layout_width="344dp"
-        android:layout_height="57dp"
-        android:layout_below="@+id/mess"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentEnd="true"
-        android:layout_marginStart="31dp"
-        android:layout_marginTop="23dp"
-        android:layout_marginEnd="31dp"
-        android:background="@drawable/searchbar"
-        android:elevation="10dp"
-        android:hint="@string/search"
-        android:inputType="textLongMessage"
-        android:padding="10dp"
-        android:shadowColor="@color/black"
-        android:textAlignment="textStart"
-        android:textColor="@color/black"
-        android:textColorHint="#757575"
-        android:autofillHints="" />
-
-    <TextView
-        android:id="@+id/mess"
+    <FrameLayout
+        android:id="@+id/frame"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="936dp"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
-        android:layout_marginStart="34dp"
-        android:layout_marginTop="15dp"
-        android:text="@string/messages"
-        android:textSize="30sp" />
-
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recycle"
-        android:layout_width="wrap_content"
-        android:layout_height="814dp"
-        android:layout_below="@+id/editText"
-        android:layout_alignParentStart="true"
         android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginStart="39dp"
-        android:layout_marginTop="20dp"
-        android:layout_marginEnd="45dp"
-        android:layout_marginBottom="32dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editText"
-        tools:ignore="TextSizeCheck" />
+        android:layout_marginStart="0dp"
+        android:layout_marginTop="0dp"
+        android:layout_marginEnd="-6dp"
+        android:layout_marginBottom="90dp" />
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:layout_width="477dp"
@@ -65,8 +26,8 @@
         android:layout_alignParentStart="true"
         android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true"
-        android:layout_marginStart="-14dp"
-        android:layout_marginEnd="0dp"
-        app:menu="@menu/bottom_menu"
-        />
+        android:layout_marginStart="-12dp"
+        android:layout_marginEnd="-2dp"
+        android:layout_marginBottom="4dp"
+        app:menu="@menu/bottom_menu" />
 </RelativeLayout>
