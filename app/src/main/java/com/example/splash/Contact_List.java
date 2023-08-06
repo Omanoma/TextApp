@@ -14,6 +14,7 @@ public class Contact_List extends AppCompatActivity {
         setContentView(R.layout.activity_contact_list);
         getSupportFragmentManager().beginTransaction().replace(R.id.frame,new Message()).commit();
         menu = findViewById(R.id.menu);
+        ///banan
 
         menu.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
