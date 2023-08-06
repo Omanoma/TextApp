@@ -3,6 +3,7 @@ package com.example.splash;
 import static io.grpc.okhttp.internal.Platform.logger;
 
 import android.os.Build;
+import android.text.TextUtils;
 import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
@@ -86,19 +87,39 @@ public class User {
     }
     public CompletableFuture<Boolean> validateUserOrPass(){
         CompletableFuture<Boolean> futureResult = new CompletableFuture<>();
-        System.out.println(password);
+        CompletableFuture<String> emails = new CompletableFuture<>();
         db.collection("userInfo").document(username).get().addOnCompleteListener(task -> {
-            System.out.println(username);
-            System.out.println(password);
-            System.out.println(task.getResult().get("Password") +" OZIOMA");
-            if(task.isSuccessful() && password.compareTo((String)(task.getResult().get("Password"))) == 0){
-                System.out.println(task.getResult().get("Password") + "The pepe");
-                futureResult.complete(true);
-
+            System.out.println(task.getResult().get("Email"));
+            if(task.isSuccessful()){
+                DocumentSnapshot doc = task.getResult();
+                if (doc.exists() && doc.contains("Email")) {
+                    LOGIN(doc.getString("Email")).thenAccept(user -> {
+                        futureResult.complete(user);
+                    });
+                }
             }
         });
         return futureResult;
     }
+    private CompletableFuture<Boolean> LOGIN(String email1) {
+        CompletableFuture<Boolean> futureResult = new CompletableFuture<>();
+        if (TextUtils.isEmpty(email1) || TextUtils.isEmpty(password)) {
+            System.out.println(email1 + "  Ozioma");
+            futureResult.complete(false);
+            return futureResult;
+        }
+        auth.signInWithEmailAndPassword(email1, password).addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                FirebaseUser user = auth.getCurrentUser();
+                if (user != null) {
+                    System.out.println(user +" OZIOMA");
+                    futureResult.complete(true);
+                }
+            }
+        });
+        return futureResult;
+    }
+
 
     public Task<Boolean> checkEmail() {
         final TaskCompletionSource<Boolean> taskCompletionSource = new TaskCompletionSource<>();
