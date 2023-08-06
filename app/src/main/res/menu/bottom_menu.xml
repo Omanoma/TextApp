@@ -11,6 +11,7 @@
         android:icon="@drawable/contact_"
         />
     <item
+        android:id="@+id/setting"
         android:title="Setting"
         android:icon="@drawable/setting"
         />

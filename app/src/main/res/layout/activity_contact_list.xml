@@ -21,6 +21,7 @@
         android:layout_marginBottom="90dp" />
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/menu"
         android:layout_width="477dp"
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"

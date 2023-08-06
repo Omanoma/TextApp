@@ -1,25 +1,39 @@
 package com.example.splash;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
-import android.app.Fragment;
-import android.content.Context;
 import android.os.Bundle;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ExecutionException;
+import android.view.MenuItem;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public class Contact_List extends AppCompatActivity {
-
+    BottomNavigationView menu;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_contact_list);
         getSupportFragmentManager().beginTransaction().replace(R.id.frame,new Message()).commit();
+        menu = findViewById(R.id.menu);
+
+        menu.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                int itemId = item.getItemId();
+                if (itemId == R.id.message) {
+                    getSupportFragmentManager().beginTransaction().replace(R.id.frame, new Message()).commit();
+                    return true;
+                } else if (itemId == R.id.contact) {
+                    getSupportFragmentManager().beginTransaction().replace(R.id.frame, new Message()).commit();
+                    return true;
+                } else if (itemId == R.id.setting) {
+                    getSupportFragmentManager().beginTransaction().replace(R.id.frame, new Settings()).commit();
+                    return true;
+                }
+                return false;
+
+                }
+        });
     }
+
 
 }
