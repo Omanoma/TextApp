@@ -59,7 +59,7 @@
         android:shadowColor="@color/black"
         android:text="LOGIN"
         android:textColor="@color/black"
-        android:textSize="20dp"
+        android:textSize="20sp"
         android:onClick="checkValidate"
         app:backgroundTint="@color/buttonColour"
         app:layout_constraintBottom_toBottomOf="parent"
