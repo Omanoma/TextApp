@@ -39,7 +39,8 @@ public class User {
     FirebaseFirestore db;
     FirebaseAuth auth;
     int image;
-    List<User> user;
+
+    String userID;
     public User(String username, String password, String email) {
         this.username = username;
         this.password = password;
@@ -67,14 +68,7 @@ public class User {
             date =  LocalDate.now();
         }
     }
-    public Map<String,Object> TurnToHash(){
-        Map<String,Object> a = new HashMap<>();
-        a.put("UserName",username);
-        a.put("Password",password);
-        a.put("Email",email);
-        a.put("Date",date.toString());
-        return a;
-    }
+
     public Map<String,Object> EmailToHash(){
         Map<String,Object> a = new HashMap<>();
         a.put("Email",email);
@@ -161,8 +155,6 @@ public class User {
         return taskCompletionSource.getTask();
     }
     public void addToDatabase(){
-        db.collection("userInfo").document(username).set(TurnToHash());
-        db.collection("EmailList").document(email).set(EmailToHash());
         auth.createUserWithEmailAndPassword(email,password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
@@ -170,6 +162,15 @@ public class User {
                     FirebaseUser a = auth.getCurrentUser();
                     assert a != null;
                     logger.info(a.getEmail());
+                    Map<String,Object> c = new HashMap<>();
+                    c.put("UserName",username);
+                    c.put("Password",password);
+                    c.put("Email",email);
+                    c.put("UserID",a.getUid());
+                    c.put("Date",date.toString());
+                    db.collection("userInfo").document(username).set(c);
+                    db.collection("EmailList").document(email).set(EmailToHash());
+                    userID = a.getUid();
                     a.sendEmailVerification();
                 }
             }
