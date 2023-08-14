@@ -43,11 +43,16 @@ public class Sign_up extends AppCompatActivity {
         else if(a.SamePass(rp) == false) Toast.makeText(Sign_up.this,"Password Not correct",Toast.LENGTH_LONG).show();
         else{ a.addToDatabase();
             Toast.makeText(Sign_up.this,"Password correct",Toast.LENGTH_LONG).show();
+            changeContactList();
         }
 
     }
     public void changeLogin(View v){
         Intent in = new Intent(this,Login.class);
+        startActivity(in);
+    }
+    public void changeContactList(){
+        Intent in = new Intent(this, Contact_List.class);
         startActivity(in);
     }
 
