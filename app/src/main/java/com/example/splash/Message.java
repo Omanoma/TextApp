@@ -1,5 +1,6 @@
 package com.example.splash;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -20,7 +21,7 @@ import java.util.concurrent.CompletableFuture;
  * Use the {@link Message#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class Message extends Fragment {
+public class Message extends Fragment implements ItemInterface{
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -30,6 +31,8 @@ public class Message extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+    List<User> user;
+    String currentUser;
 
     public Message() {
         // Required empty public constructor
@@ -73,16 +76,27 @@ public class Message extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         User a = new User();
+        currentUser = a.getCurrentUser();
         RecyclerView r = view.findViewById(R.id.recycle);
         CompletableFuture<List<User>> futureUserList = a.getAllContact();
         futureUserList.thenAccept(users -> {
-            List<User> user = users;
-            CardList_Adapter c = new CardList_Adapter(getContext(), user);
+            user = users;
+            CardList_Adapter c = new CardList_Adapter(getContext(), user,this);
             r.setAdapter(c);
             r.setLayoutManager(new LinearLayoutManager(getContext()));
 
             System.out.println(user + " kill 2");
         });
         super.onViewCreated(view, savedInstanceState);
+    }
+
+    @Override
+    public void onItemClick(int position) {
+        Intent intent = new Intent(getContext(),Chat.class);
+        intent.putExtra("Image",user.get(position).image);
+        intent.putExtra("User",user.get(position).username);
+        intent.putExtra("OTHERUserID",user.get(position).userID);
+        intent.putExtra("CURRENTUSERID",currentUser);
+        startActivity(intent);
     }
 }

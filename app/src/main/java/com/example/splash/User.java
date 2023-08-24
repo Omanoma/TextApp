@@ -4,7 +4,6 @@ import static io.grpc.okhttp.internal.Platform.logger;
 
 import android.os.Build;
 import android.text.TextUtils;
-import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
 
@@ -17,7 +16,6 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.google.firebase.firestore.QuerySnapshot;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -27,7 +25,6 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Random;
 import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ExecutionException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -199,6 +196,9 @@ public class User {
 
     public int getImage() {
         return image;
+    }
+    public String getCurrentUser(){
+        return auth.getCurrentUser().getUid();
     }
     public CompletableFuture<List<User>> getAllContact() {
         CompletableFuture<List<User>> futureResult = new CompletableFuture<>();

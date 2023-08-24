@@ -1,6 +1,7 @@
 package com.example.splash;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,9 +18,12 @@ public class CardList_Adapter extends RecyclerView.Adapter<CardList_Adapter.MyVi
     Context context;
     List<User> a;
 
-    public CardList_Adapter(Context con, List<User> a){
+    private final ItemInterface item;
+
+    public CardList_Adapter(Context con, List<User> a, ItemInterface item){
         this.context = con;
         this.a = a;
+        this.item = item;
     }
 
     @NonNull
@@ -27,7 +31,7 @@ public class CardList_Adapter extends RecyclerView.Adapter<CardList_Adapter.MyVi
     public CardList_Adapter.MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(context);
         View v = inflater.inflate(R.layout.card,parent,false);
-        return new CardList_Adapter.MyViewHolder(v);
+        return new CardList_Adapter.MyViewHolder(v,item);
     }
 
     @Override
@@ -43,10 +47,19 @@ public class CardList_Adapter extends RecyclerView.Adapter<CardList_Adapter.MyVi
     public static class MyViewHolder extends RecyclerView.ViewHolder{
         ImageView icon;
         TextView name;
-        public MyViewHolder(@NonNull View itemView) {
+        public MyViewHolder(@NonNull View itemView,ItemInterface item) {
             super(itemView);
             icon = itemView.findViewById(R.id.imageView);
             name = itemView.findViewById(R.id.Name);
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if(item != null){
+                        int pos = getAdapterPosition();
+                        item.onItemClick(pos);
+                    }
+                }
+            });
 
         }
     }
