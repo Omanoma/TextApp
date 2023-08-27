@@ -59,6 +59,17 @@ public class User {
         auth = FirebaseAuth.getInstance();
         IMAGE a = new IMAGE();
         image = a.RandomImage();
+        db.collection("userInfo").document(username).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                try {
+                    userID = task.getResult().get("UserID").toString();
+                }
+                catch(Exception e){
+                    userID = "NULL2";
+                }
+            }
+        });
     }
     private void CreatedDate(){
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -223,6 +234,9 @@ public class User {
 
         return futureResult;
     }
+     public void ji(){
+
+     }
 
 
     enum label{

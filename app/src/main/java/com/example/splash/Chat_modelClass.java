@@ -6,10 +6,12 @@ public class Chat_modelClass {
 
     private int viewType;
     private String message;
+    private int image;
 
-    public Chat_modelClass(int viewType,String message){
+    public Chat_modelClass(int viewType,String message,int image){
         this.viewType = viewType;
         this.message = message;
+        this.image = image;
     }
 
     public int getViewType() {
@@ -19,4 +21,6 @@ public class Chat_modelClass {
     public String getMessage() {
         return message;
     }
+
+    public int getImage(){return image;}
 }

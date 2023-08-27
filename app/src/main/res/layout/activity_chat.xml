@@ -50,7 +50,9 @@
         android:layout_alignParentBottom="true"
         android:padding="10dp"
         android:src="@drawable/sender"
-        tools:ignore="SpeakableTextPresentCheck" />
+        android:onClick="sendMessage"
+        tools:ignore="SpeakableTextPresentCheck"
+        />
 
     <EditText
         android:id="@+id/input2"

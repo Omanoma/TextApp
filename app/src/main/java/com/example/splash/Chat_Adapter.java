@@ -7,6 +7,7 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -49,10 +50,10 @@ public class Chat_Adapter extends RecyclerView.Adapter {
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         switch (lis.get(position).getViewType()){
             case Layout1: String sm = lis.get(position).getMessage();
-                ((SenderMessageViewHolder)holder).setView(sm);
+                ((SenderMessageViewHolder)holder).setView(sm,lis.get(position).getImage());
                 break;
             case Layout2: String rm = lis.get(position).getMessage();
-                ((ReceiverMessageViewHolder)holder).setView(rm);
+                ((ReceiverMessageViewHolder)holder).setView(rm,lis.get(position).getImage());
                 break;
 
 
@@ -67,22 +68,28 @@ public class Chat_Adapter extends RecyclerView.Adapter {
 
 class SenderMessageViewHolder extends RecyclerView.ViewHolder{
     private TextView tv_sm;
+    private ImageView image;
     public SenderMessageViewHolder(@NonNull View itemView) {
         super(itemView);
         tv_sm = itemView.findViewById(R.id.SText);
+        image =  itemView.findViewById(R.id.imageView3);
     }
-    public void setView(String text){
+    public void setView(String text,int images){
+        image.setImageResource(images);
         tv_sm.setText(text);
     }
 }
 
 class ReceiverMessageViewHolder extends RecyclerView.ViewHolder{
     private TextView tv_rm;
+    private ImageView image;
     public ReceiverMessageViewHolder(@NonNull View itemView) {
         super(itemView);
         tv_rm = itemView.findViewById(R.id.RText);
+        image =  itemView.findViewById(R.id.imageView2);
     }
-    public void setView(String text){
+    public void setView(String text, int images){
+        image.setImageResource(images);
         tv_rm.setText(text);
     }
 }
