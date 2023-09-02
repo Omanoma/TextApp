@@ -24,6 +24,7 @@ import com.google.firebase.firestore.DocumentChange;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.firestore.model.Document;
@@ -62,7 +63,12 @@ public class Chat extends AppCompatActivity {
         getReceiverMessage();
         getSenderMessage();
         list.sort(new SortbyDate());
-        listenMessages();
+        db.collection("Chat")
+                .whereEqualTo("SenderID",otherUser).whereEqualTo("ReceiverID",currentUser)
+                .addSnapshotListener(eventListener);
+        db.collection("Chat")
+                .whereEqualTo("SenderID",currentUser).whereEqualTo("ReceiverID",otherUser)
+                .addSnapshotListener(eventListener);
 
 
 
@@ -123,12 +129,14 @@ public class Chat extends AppCompatActivity {
         if(value != null){
              int count = list.size();
              for(DocumentChange documentChange: value.getDocumentChanges()){
-                 if(documentChange.getType() == DocumentChange.Type.ADDED) {
+                 System.out.println(documentChange.getType());
                      list.add(new Chat_modelClass(Chat_modelClass.Layout2, documentChange.getDocument().getString("Message"), image,documentChange.getDocument().getDate("Date")));
-                 }
              }
              if(count == 0){
                  adapter.notifyDataSetChanged();
+                 adapter = new Chat_Adapter(list,Chat.this);
+                 recyclerView.setLayoutManager(new LinearLayoutManager(this));
+                 recyclerView.setAdapter(adapter);
              }
              else{
                  adapter = new Chat_Adapter(list,Chat.this);
@@ -139,6 +147,8 @@ public class Chat extends AppCompatActivity {
 
              }
         }
+        list.sort(new SortbyDate());
+
     };
     public void getReceiverMessage(){
         db.collection("Chat")
