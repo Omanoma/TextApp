@@ -35,6 +35,6 @@ class SortbyDate implements Comparator<Chat_modelClass>
     // roll number
     public int compare(Chat_modelClass a, Chat_modelClass b)
     {
-        return b.date.compareTo(a.date);
+        return a.date.compareTo(b.date);
     }
 }

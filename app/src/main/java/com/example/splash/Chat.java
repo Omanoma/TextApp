@@ -4,6 +4,7 @@ import static androidx.constraintlayout.helper.widget.MotionEffect.TAG;
 import static io.grpc.okhttp.internal.Platform.logger;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -24,6 +25,7 @@ import com.google.firebase.firestore.DocumentChange;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -60,18 +62,54 @@ public class Chat extends AppCompatActivity {
         recyclerView = findViewById(R.id.chatSpace);
         getExtraInfo(b);
         setMessagerLayout();
-        getReceiverMessage();
-        getSenderMessage();
+        //getReceiverMessage();
+        //getSenderMessage();
         list.sort(new SortbyDate());
-        db.collection("Chat")
-                .whereEqualTo("SenderID",otherUser).whereEqualTo("ReceiverID",currentUser)
-                .addSnapshotListener(eventListener);
-        db.collection("Chat")
-                .whereEqualTo("SenderID",currentUser).whereEqualTo("ReceiverID",otherUser)
-                .addSnapshotListener(eventListener);
+        // Attach a Firestore snapshot listener to the chat collectio
+        db.collection("Chat").whereEqualTo("SenderID",otherUser).whereEqualTo("RecieverID",currentUser).addSnapshotListener(new EventListener<QuerySnapshot>() {
+                    @Override
+                    public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
+                        assert value != null;
+                        for(DocumentChange docchange : value.getDocumentChanges()){
+                            if(docchange.getType() == DocumentChange.Type.ADDED){
+                            System.out.println("addd" + docchange.getType());}
+                            QueryDocumentSnapshot doc = docchange.getDocument();
+                            list.add(new Chat_modelClass(Chat_modelClass.Layout2,doc.getString("Messages"),image,doc.getDate("Date")));
+
+                        }
+                        list.sort(new SortbyDate());
+                        adapter = new Chat_Adapter(list,Chat.this);
+                        recyclerView.setLayoutManager(new LinearLayoutManager(Chat.this));
+                        recyclerView.setAdapter(adapter);
+                        adapter.notifyItemRangeInserted(list.size(),list.size());
+                        recyclerView.smoothScrollToPosition(list.size()-1);
+
+                    }
+
+                });
+        db.collection("Chat").whereEqualTo("SenderID",currentUser).whereEqualTo("RecieverID",otherUser).addSnapshotListener(new EventListener<QuerySnapshot>() {
+            @Override
+            public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
+                assert value != null;
+                for(DocumentChange docchange : value.getDocumentChanges()){
+                    if(docchange.getType() == DocumentChange.Type.ADDED){
+                        System.out.println("addd" + docchange.getType());
+                    QueryDocumentSnapshot doc = docchange.getDocument();
+                    list.add(new Chat_modelClass(Chat_modelClass.Layout1,doc.getString("Messages"),image,doc.getDate("Date")));
+                }
+                }
+                list.sort(new SortbyDate());
+                adapter = new Chat_Adapter(list,Chat.this);
+                recyclerView.setLayoutManager(new LinearLayoutManager(Chat.this));
+                recyclerView.setAdapter(adapter);
+                adapter.notifyItemRangeInserted(list.size(),list.size());
+                recyclerView.smoothScrollToPosition(list.size()-1);
+
+        }
 
 
 
+    });
     }
     public void sendMessage(View v){
         String b = message.getText().toString();
@@ -115,64 +153,4 @@ public class Chat extends AppCompatActivity {
         logger.info(otherUser+" OZIOMA2");
         logger.info(currentUser+" OZIOMA3");
     }
-
-    private void listenMessages(){
-        db.collection("Chat")
-                .whereEqualTo("SenderID",otherUser).whereEqualTo("ReceiverID",currentUser)
-                .addSnapshotListener(eventListener);
-        db.collection("Chat")
-                .whereEqualTo("SenderID",otherUser).whereEqualTo("ReceiverID",currentUser)
-                .addSnapshotListener(eventListener);
-    }
-    public final EventListener<QuerySnapshot> eventListener = (value, error) ->{
-        if(error != null) return;
-        if(value != null){
-             int count = list.size();
-             for(DocumentChange documentChange: value.getDocumentChanges()){
-                 System.out.println(documentChange.getType());
-                     list.add(new Chat_modelClass(Chat_modelClass.Layout2, documentChange.getDocument().getString("Message"), image,documentChange.getDocument().getDate("Date")));
-             }
-             if(count == 0){
-                 adapter.notifyDataSetChanged();
-                 adapter = new Chat_Adapter(list,Chat.this);
-                 recyclerView.setLayoutManager(new LinearLayoutManager(this));
-                 recyclerView.setAdapter(adapter);
-             }
-             else{
-                 adapter = new Chat_Adapter(list,Chat.this);
-                 recyclerView.setLayoutManager(new LinearLayoutManager(this));
-                 recyclerView.setAdapter(adapter);
-                 adapter.notifyItemRangeInserted(list.size(),list.size());
-                 recyclerView.smoothScrollToPosition(list.size()-1);
-
-             }
-        }
-        list.sort(new SortbyDate());
-
-    };
-    public void getReceiverMessage(){
-        db.collection("Chat")
-                .whereEqualTo("SenderID",otherUser).whereEqualTo("RecieverID",currentUser)
-                .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                      for(QueryDocumentSnapshot doc : task.getResult()){
-                          list.add(new Chat_modelClass(Chat_modelClass.Layout2,doc.getString("Messages"),image,new Date()));
-                      }
-                    }
-                });
-    }
-    public void getSenderMessage(){
-        db.collection("Chat")
-                .whereEqualTo("SenderID",currentUser).whereEqualTo("RecieverID",otherUser)
-                .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        for(QueryDocumentSnapshot doc : task.getResult()){
-                            list.add(new Chat_modelClass(Chat_modelClass.Layout1,doc.getString("Messages"),R.mipmap.face1,new Date()));
-                        }
-                    }
-                });
-    }
-
 }

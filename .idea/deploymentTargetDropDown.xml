@@ -13,13 +13,14 @@
       </Target>
     </runningDeviceTargetSelectedWithDropDown>
     <timeTargetWasSelectedWithDropDown value="2023-09-02T10:05:40.558564100Z" />
+    <multipleDevicesSelectedInDropDown value="true" />
     <runningDeviceTargetsSelectedWithDialog>
       <Target>
         <type value="RUNNING_DEVICE_TARGET" />
         <deviceKey>
           <Key>
-            <type value="SERIAL_NUMBER" />
-            <value value="HA1KY3PH" />
+            <type value="VIRTUAL_DEVICE_PATH" />
+            <value value="C:\Users\omano\.android\avd\phone_3.avd" />
           </Key>
         </deviceKey>
       </Target>
