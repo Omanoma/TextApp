@@ -31,6 +31,7 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.firestore.model.Document;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
@@ -49,12 +50,14 @@ public class Chat extends AppCompatActivity {
     String otherUser;
     String currentUser;
     FirebaseFirestore db;
+    HashMap<String, Boolean> dates;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         db = FirebaseFirestore.getInstance();
         setContentView(R.layout.activity_chat);
+        dates = new HashMap<>();
         icon = findViewById(R.id.icons);
         username = findViewById(R.id.usernameChat);
         Bundle b = getIntent().getExtras();
@@ -71,11 +74,19 @@ public class Chat extends AppCompatActivity {
                     public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
                         assert value != null;
                         for(DocumentChange docchange : value.getDocumentChanges()){
-                            if(docchange.getType() == DocumentChange.Type.ADDED){
-                            System.out.println("addd" + docchange.getType());}
-                            QueryDocumentSnapshot doc = docchange.getDocument();
-                            list.add(new Chat_modelClass(Chat_modelClass.Layout2,doc.getString("Messages"),image,doc.getDate("Date")));
+                            if(docchange.getType() == DocumentChange.Type.ADDED) {
+                                System.out.println("addd" + docchange.getType());
+                                QueryDocumentSnapshot doc = docchange.getDocument();
+                                SimpleDateFormat formatter = new SimpleDateFormat("DD/MM/YYYY");
+                                logger.info(doc.getDate("Date")+" Ozioma123");
+                                boolean g = dates.containsKey(formatter.format(doc.getDate("Date")));
+                                if (!g) {
+                                    dates.put(formatter.format(doc.getDate("Date")), true);
+                                    list.add(new Chat_modelClass(Chat_modelClass.Layout3, doc.getDate("Date")));
+                                }
 
+                                list.add(new Chat_modelClass(Chat_modelClass.Layout2, doc.getString("Messages"), image, doc.getDate("Date")));
+                            }
                         }
                         list.sort(new SortbyDate());
                         adapter = new Chat_Adapter(list,Chat.this);
@@ -95,8 +106,14 @@ public class Chat extends AppCompatActivity {
                     if(docchange.getType() == DocumentChange.Type.ADDED){
                         System.out.println("addd" + docchange.getType());
                     QueryDocumentSnapshot doc = docchange.getDocument();
-                    list.add(new Chat_modelClass(Chat_modelClass.Layout1,doc.getString("Messages"),image,doc.getDate("Date")));
-                }
+                        SimpleDateFormat formatter = new SimpleDateFormat("DD/MM/YYYY");
+                        boolean g = dates.containsKey(formatter.format(doc.getDate("Date")));
+                        if (!g) {
+                            dates.put(formatter.format(doc.getDate("Date")), true);
+                            list.add(new Chat_modelClass(Chat_modelClass.Layout3, doc.getDate("Date")));
+                        }
+
+                        list.add(new Chat_modelClass(Chat_modelClass.Layout1, doc.getString("Messages"), image, doc.getDate("Date")));                }
                 }
                 list.sort(new SortbyDate());
                 adapter = new Chat_Adapter(list,Chat.this);
@@ -118,11 +135,6 @@ public class Chat extends AppCompatActivity {
             toast.show();
         }
         else{
-            list.add(new Chat_modelClass(Chat_modelClass.Layout1,b,R.mipmap.face1,new Date()));
-            adapter = new Chat_Adapter(list,Chat.this);
-            recyclerView.setLayoutManager(new LinearLayoutManager(this));
-            recyclerView.setAdapter(adapter);
-            recyclerView.getLayoutManager().scrollToPosition(list.size()-1);
             Map<String,Object> chats = new HashMap<>();
             chats.put("SenderID",currentUser);
             chats.put("RecieverID", otherUser);
@@ -131,7 +143,7 @@ public class Chat extends AppCompatActivity {
 
             db.collection("Chat").add(chats);
             adapter.notifyDataSetChanged();
-
+            message.setText(null);
             Toast toast=Toast. makeText(this,"Sended",Toast.LENGTH_SHORT);
             toast.show();
         }

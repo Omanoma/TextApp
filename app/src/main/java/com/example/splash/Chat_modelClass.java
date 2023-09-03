@@ -7,6 +7,8 @@ public class Chat_modelClass {
     public static final int Layout1 = 1;
     public static final int Layout2 = 2;
 
+    public static final int Layout3 = 3;
+
     private int viewType;
     private String message;
     private int image;
@@ -17,6 +19,11 @@ public class Chat_modelClass {
         this.message = message;
         this.image = image;
         this.date = date;
+    }
+    public Chat_modelClass(int viewType, Date date){
+        this.viewType = viewType;
+        this.date = date;
+
     }
 
     public int getViewType() {
