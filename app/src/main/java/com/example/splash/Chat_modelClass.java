@@ -22,6 +22,9 @@ public class Chat_modelClass {
     }
     public Chat_modelClass(int viewType, Date date){
         this.viewType = viewType;
+        date.setHours(0);
+        date.setMinutes(0);
+        date.setSeconds(0);
         this.date = date;
 
     }
