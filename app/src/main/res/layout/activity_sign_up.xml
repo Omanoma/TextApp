@@ -87,6 +87,7 @@
         android:layout_marginBottom="220dp"
         android:gravity="center"
         android:text="Terms &amp; Condition Agreement"
+        android:onClick="changeTAndC"
         android:textColor="@color/linkColour"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

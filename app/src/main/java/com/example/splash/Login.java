@@ -52,10 +52,12 @@ public class Login extends AppCompatActivity {
     }
     public void changeSignUp(View v){
         Intent in = new Intent(this,Sign_up.class);
+        finish();
         startActivity(in);
     }
     public void changeContactList(){
         Intent in = new Intent(this, Contact_List.class);
+        finish();
         startActivity(in);
     }
     public void changeForgetPasswords(View v){

@@ -49,11 +49,16 @@ public class Sign_up extends AppCompatActivity {
     }
     public void changeLogin(View v){
         Intent in = new Intent(this,Login.class);
+        finish();
         startActivity(in);
     }
     public void changeContactList(){
         Intent in = new Intent(this, Contact_List.class);
+        finish();
         startActivity(in);
+    }
+    public void changeTAndC(View v){
+        setContentView(R.layout.terms_and_conditions);
     }
 
 
