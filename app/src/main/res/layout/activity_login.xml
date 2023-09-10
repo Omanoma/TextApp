@@ -95,11 +95,13 @@
         android:layout_marginTop="56dp"
         android:layout_marginEnd="48dp"
         android:gravity="top"
+        android:onClick="changeForgetPasswords"
         android:text="Forget Password"
         android:textColor="@color/linkColour"
         android:textSize="15sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/login_Button" />
+        app:layout_constraintTop_toBottomOf="@+id/login_Button"
+        tools:ignore="TouchTargetSizeCheck" />
 
     <TextView
         android:id="@+id/textView2"

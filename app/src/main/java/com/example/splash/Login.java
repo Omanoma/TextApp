@@ -58,5 +58,9 @@ public class Login extends AppCompatActivity {
         Intent in = new Intent(this, Contact_List.class);
         startActivity(in);
     }
+    public void changeForgetPasswords(View v){
+        Intent in = new Intent(this,forgetPasswords.class);
+        startActivity(in);
+    }
 
 }

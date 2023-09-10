@@ -39,6 +39,7 @@ public class MainActivity extends AppCompatActivity {
         ImageView.setAnimation(rototeAnimation);
     }
     private void changeActivity(){
+        finish();
         startActivity(intent);
     }
 }
