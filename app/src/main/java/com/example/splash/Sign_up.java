@@ -41,7 +41,8 @@ public class Sign_up extends AppCompatActivity {
         if(!a.checkUser().isSuccessful()) Toast.makeText(Sign_up.this,"User Not correct",Toast.LENGTH_LONG).show();
         else if(!a.checkEmail().isSuccessful())  Toast.makeText(Sign_up.this,"Email Not correct",Toast.LENGTH_LONG).show();
         else if(a.SamePass(rp) == false) Toast.makeText(Sign_up.this,"Password Not correct",Toast.LENGTH_LONG).show();
-        else{ a.addToDatabase();
+        else{
+            a.addToDatabase();
             Toast.makeText(Sign_up.this,"Password correct",Toast.LENGTH_LONG).show();
             changeContactList();
         }

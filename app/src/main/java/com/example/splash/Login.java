@@ -32,7 +32,6 @@ public class Login extends AppCompatActivity {
         String pass = password.getText().toString();
         User a = new User(user,pass);
         CompletableFuture<Boolean> h = (a.validateUserOrPass());
-        System.out.println(h+" PIE");
         AtomicReference<String> statement = new AtomicReference<>("");
         h.thenAccept(isValid -> {
             if (isValid) {
@@ -46,7 +45,6 @@ public class Login extends AppCompatActivity {
                 Toast.makeText(Login.this, statement.get(),Toast.LENGTH_LONG).show();//changeContactList();
 
             }
-            System.out.println(h+" PIE");
         });
 
     }

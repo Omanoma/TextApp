@@ -14,7 +14,6 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="25dp"
         app:shapeAppearanceOverlay="@style/circleImageView"
-        app:srcCompat="@mipmap/face2"
         app:strokeColor="@color/black"
         app:strokeWidth="1dp" />
 

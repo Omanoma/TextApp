@@ -3,9 +3,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingTop="55dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".Message">
-
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="55dp"
+        >
     <EditText
         android:id="@+id/editText"
         android:layout_width="344dp"
@@ -53,5 +57,20 @@
         android:layout_marginEnd="45dp"
         android:layout_marginBottom="32dp"
         tools:ignore="TextSizeCheck" />
+</RelativeLayout>
+
+    <com.google.android.material.imageview.ShapeableImageView
+        android:id="@+id/icon2"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="33dp"
+        android:contentDescription="@string/hello_blank_fragment"
+        app:shapeAppearanceOverlay="@style/circleImageView"
+        app:strokeColor="@color/black"
+        app:strokeWidth="1dp" />
+
 
 </RelativeLayout>

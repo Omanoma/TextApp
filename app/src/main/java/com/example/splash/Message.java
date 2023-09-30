@@ -10,6 +10,8 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -24,6 +26,7 @@ public class Message extends Fragment implements ItemInterface{
 
     List<User> user;
     String currentUser;
+    ImageView icon;
 
     public Message() {
         // Required empty public constructor
@@ -38,8 +41,18 @@ public class Message extends Fragment implements ItemInterface{
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_message, container, false);
+        View v = inflater.inflate(R.layout.fragment_message, container, false);
+        icon = v.findViewById(R.id.icon2);
+        icon.setClickable(true);
+        icon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ProfilePop p = new ProfilePop();
+                p.show(getParentFragmentManager(),"THE");
+            }
+        });
+
+        return v;
     }
 
     @Override
@@ -68,4 +81,7 @@ public class Message extends Fragment implements ItemInterface{
         intent.putExtra("CURRENTUSERID",currentUser);
         startActivity(intent);
     }
+
+
+
 }

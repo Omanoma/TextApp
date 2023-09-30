@@ -1,5 +1,6 @@
 package com.example.splash;
 
+
 import static io.grpc.okhttp.internal.Platform.logger;
 
 import android.os.Build;
@@ -13,9 +14,12 @@ import com.google.android.gms.tasks.TaskCompletionSource;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.UserProfileChangeRequest;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -23,7 +27,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-import java.util.Random;
 import java.util.concurrent.CompletableFuture;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -35,7 +38,8 @@ public class User {
     LocalDate date;
     FirebaseFirestore db;
     FirebaseAuth auth;
-    int image;
+    String image;
+    FirebaseStorage storage;
 
     String userID;
     public User(String username, String password, String email) {
@@ -44,29 +48,29 @@ public class User {
         this.email = email;
         db = FirebaseFirestore.getInstance();
         auth = FirebaseAuth.getInstance();
-        IMAGE a = new IMAGE();
-        image = a.RandomImage();
+        image = "gs://textapp-75211.appspot.com/face1.png";
         CreatedDate();
     }
     public User(){
         db = FirebaseFirestore.getInstance();
         auth = FirebaseAuth.getInstance();
     }
-    public User(String username,String password){
+    public User(String username, String password){
         this.username = username;
         this.password = password;
         db = FirebaseFirestore.getInstance();
         auth = FirebaseAuth.getInstance();
-        IMAGE a = new IMAGE();
-        image = a.RandomImage();
+        storage = FirebaseStorage.getInstance();
         db.collection("userInfo").document(username).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                 try {
                     userID = task.getResult().get("UserID").toString();
+                    image = task.getResult().get("Url").toString();
                 }
                 catch(Exception e){
                     userID = "NULL2";
+
                 }
             }
         });
@@ -89,7 +93,6 @@ public class User {
     }
     public CompletableFuture<Boolean> validateUserOrPass(){
         CompletableFuture<Boolean> futureResult = new CompletableFuture<>();
-        CompletableFuture<String> emails = new CompletableFuture<>();
         db.collection("userInfo").document(username).get().addOnCompleteListener(task -> {
             System.out.println(task.getResult().get("Email"));
             if(task.isSuccessful()){
@@ -114,7 +117,6 @@ public class User {
             if (task.isSuccessful()) {
                 FirebaseUser user = auth.getCurrentUser();
                 if (user != null) {
-                    System.out.println(user +" OZIOMA");
                     futureResult.complete(true);
                 }
             }
@@ -176,9 +178,14 @@ public class User {
                     c.put("Email",email);
                     c.put("UserID",a.getUid());
                     c.put("Date",date.toString());
+                    c.put("Url","gs://textapp-75211.appspot.com/face1.png");
                     db.collection("userInfo").document(username).set(c);
                     db.collection("EmailList").document(email).set(EmailToHash());
                     userID = a.getUid();
+                    UserProfileChangeRequest profileChangeRequest = new UserProfileChangeRequest.Builder()
+                            .setDisplayName(username)
+                            .build();
+                    a.updateProfile(profileChangeRequest);
                     a.sendEmailVerification();
                 }
             }
@@ -204,10 +211,6 @@ public class User {
         }
         return m.matches();
     }
-
-    public int getImage() {
-        return image;
-    }
     public String getCurrentUser(){
         return auth.getCurrentUser().getUid();
     }
@@ -216,47 +219,24 @@ public class User {
 
         db.collection("userInfo").get().addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
-                List<User> user = new ArrayList<>();
+                List<User> users = new ArrayList<>();
 
                 for (QueryDocumentSnapshot doc : task.getResult()) {
                     String username = doc.getString("UserName");
                     String password = doc.getString("Password");
-                    user.add(new User(username, password));
+                    users.add(new User(username, password));
                 }
-
-                // Complete the future with the user list
-                futureResult.complete(user);
+                futureResult.complete(users);
             } else {
-                // An error occurred while retrieving the documents, complete the future exceptionally
                 futureResult.completeExceptionally(task.getException());
             }
         });
 
         return futureResult;
     }
-     public void ji(){
-
-     }
-
-
     enum label{
         PASSWORD,
         USERNAME,
         EMAIL
-    }
-}
-
-
-
- class IMAGE{
-    int image1 = R.mipmap.face1;
-    int image2 = R.mipmap.face2;
-    int image3 = R.mipmap.face4;
-    int image4 = R.mipmap.face3;
-    int [] a = {image1,image2,image3,image4};
-    public int RandomImage(){
-        Random rd = new Random();
-        int g = rd.nextInt(a.length);
-        return a[g];
     }
 }
