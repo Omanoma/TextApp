@@ -21,7 +21,6 @@ import java.util.List;
 public class CardList_Adapter extends RecyclerView.Adapter<CardList_Adapter.MyViewHolder>{
     Context context;
     List<User> a;
-    FirebaseStorage storage;
 
     private final ItemInterface item;
 
@@ -41,11 +40,7 @@ public class CardList_Adapter extends RecyclerView.Adapter<CardList_Adapter.MyVi
 
     @Override
     public void onBindViewHolder(@NonNull CardList_Adapter.MyViewHolder holder, int position) {
-        //holder.icon.setImageResource(a.get(position));
-        storage = FirebaseStorage.getInstance();
-        StorageReference storageReference = storage.getReferenceFromUrl(a.get(position).image);
-
-
+        holder.icon.setImageResource(a.get(position).getImage());
         holder.name.setText(a.get(position).username);
     }
 

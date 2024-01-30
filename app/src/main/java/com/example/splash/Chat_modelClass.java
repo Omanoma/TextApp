@@ -41,8 +41,6 @@ public class Chat_modelClass {
 }
 class SortbyDate implements Comparator<Chat_modelClass>
 {
-    // Used for sorting in ascending order of
-    // roll number
     public int compare(Chat_modelClass a, Chat_modelClass b)
     {
         return a.date.compareTo(b.date);

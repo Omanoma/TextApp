@@ -93,7 +93,7 @@ public class Chat extends AppCompatActivity {
                         recyclerView.setLayoutManager(new LinearLayoutManager(Chat.this));
                         recyclerView.setAdapter(adapter);
                         adapter.notifyItemRangeInserted(list.size(),list.size());
-                        recyclerView.smoothScrollToPosition(list.size()-1);
+                       // recyclerView.smoothScrollToPosition(list.size()-1);
 
                     }
 

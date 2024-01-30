@@ -27,6 +27,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Random;
 import java.util.concurrent.CompletableFuture;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -38,7 +39,8 @@ public class User {
     LocalDate date;
     FirebaseFirestore db;
     FirebaseAuth auth;
-    String image;
+    String image1;
+    int image;
     FirebaseStorage storage;
 
     String userID;
@@ -48,7 +50,9 @@ public class User {
         this.email = email;
         db = FirebaseFirestore.getInstance();
         auth = FirebaseAuth.getInstance();
-        image = "gs://textapp-75211.appspot.com/face1.png";
+        IMAGE a = new IMAGE();
+        image = a.RandomImage();
+        image1 = "gs://textapp-75211.appspot.com/face1.png";
         CreatedDate();
     }
     public User(){
@@ -61,12 +65,14 @@ public class User {
         db = FirebaseFirestore.getInstance();
         auth = FirebaseAuth.getInstance();
         storage = FirebaseStorage.getInstance();
+        IMAGE a = new IMAGE();
+        image = a.RandomImage();
         db.collection("userInfo").document(username).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                 try {
                     userID = task.getResult().get("UserID").toString();
-                    image = task.getResult().get("Url").toString();
+
                 }
                 catch(Exception e){
                     userID = "NULL2";
@@ -105,6 +111,9 @@ public class User {
             }
         });
         return futureResult;
+    }
+    public int getImage() {
+        return image;
     }
     private CompletableFuture<Boolean> LOGIN(String email1) {
         CompletableFuture<Boolean> futureResult = new CompletableFuture<>();
@@ -238,5 +247,16 @@ public class User {
         PASSWORD,
         USERNAME,
         EMAIL
+    }
+}
+class IMAGE{
+    int image1 = R.mipmap.face1;
+    int image2 = R.mipmap.face2;
+    int image4 = R.mipmap.face3;
+    int [] a = {image1,image2,image4};
+    public int RandomImage(){
+        Random rd = new Random();
+        int g = rd.nextInt(a.length);
+        return a[g];
     }
 }
