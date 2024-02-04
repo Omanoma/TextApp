@@ -31,14 +31,16 @@ public class Login extends AppCompatActivity {
         String user = username.getText().toString();
         String pass = password.getText().toString();
         User a = new User(user,pass);
+        Bundle bundle = new Bundle();
         CompletableFuture<Boolean> h = (a.validateUserOrPass());
         AtomicReference<String> statement = new AtomicReference<>("");
         h.thenAccept(isValid -> {
             if (isValid) {
+                bundle.putParcelable("Username", a);
                 statement.set("User validation successful.");
                 Toast.makeText(Login.this, statement.get(),Toast.LENGTH_LONG).show();//changeContactList();
                 System.out.println("User validation successful.");
-                changeContactList();
+                changeContactList(bundle);
             } else {
                 statement.set("User validation failed.");
                 System.out.println("User validation failed.");
@@ -53,8 +55,9 @@ public class Login extends AppCompatActivity {
         finish();
         startActivity(in);
     }
-    public void changeContactList(){
+    public void changeContactList(Bundle bun){
         Intent in = new Intent(this, Contact_List.class);
+        in.putExtras(bun);
         finish();
         startActivity(in);
     }

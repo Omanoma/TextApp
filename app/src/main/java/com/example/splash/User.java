@@ -4,6 +4,9 @@ package com.example.splash;
 import static io.grpc.okhttp.internal.Platform.logger;
 
 import android.os.Build;
+import android.os.Bundle;
+import android.os.Parcel;
+import android.os.Parcelable;
 import android.text.TextUtils;
 
 import androidx.annotation.NonNull;
@@ -21,10 +24,14 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import java.util.ListIterator;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Random;
@@ -32,11 +39,13 @@ import java.util.concurrent.CompletableFuture;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class User {
+public class User implements Parcelable {
     String username;
     String password;
     String email;
+    ArrayList<Map<String,String>> friendsList;
     LocalDate date;
+
     FirebaseFirestore db;
     FirebaseAuth auth;
     String image1;
@@ -72,6 +81,7 @@ public class User {
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                 try {
                     userID = task.getResult().get("UserID").toString();
+                    friendsList = (ArrayList<Map<String, String>>) task.getResult().get("FriendLists");
 
                 }
                 catch(Exception e){
@@ -80,7 +90,42 @@ public class User {
                 }
             }
         });
+        System.out.println(friendsList);
     }
+
+    protected User(Parcel in) {
+        username = in.readString();
+        password = in.readString();
+        email = in.readString();
+        image1 = in.readString();
+        image = in.readInt();
+        userID = in.readString();
+
+        // Read friendsList
+        int friendsListSize = in.readInt();
+        this.friendsList = new ArrayList<>(friendsListSize);
+        for (int j = 0; j < friendsListSize; j++) {
+            Bundle friendBundle = in.readBundle(getClass().getClassLoader());
+            Map<String, String> friendMap = new HashMap<>();
+            for (String key : friendBundle.keySet()) {
+                friendMap.put(key, friendBundle.getString(key));
+            }
+            this.friendsList.add(friendMap);
+        }
+    }
+
+    public static final Creator<User> CREATOR = new Creator<User>() {
+        @Override
+        public User createFromParcel(Parcel in) {
+            return new User(in);
+        }
+
+        @Override
+        public User[] newArray(int size) {
+            return new User[size];
+        }
+    };
+
     private void CreatedDate(){
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             date =  LocalDate.now();
@@ -232,8 +277,7 @@ public class User {
 
                 for (QueryDocumentSnapshot doc : task.getResult()) {
                     String username = doc.getString("UserName");
-                    String password = doc.getString("Password");
-                    users.add(new User(username, password));
+                    users.add(new User(username,"12332"));
                 }
                 futureResult.complete(users);
             } else {
@@ -243,6 +287,46 @@ public class User {
 
         return futureResult;
     }
+
+    public CompletableFuture<List<User>>  getFriendList() {
+        CompletableFuture<List<User>> usersList = new CompletableFuture<>();
+        List<User> users = new ArrayList<>();
+        for(int i = 0; i<friendsList.size();i++){
+            users.add(new User(friendsList.get(i).get("UserName"),""));
+        }
+        usersList.complete(users);
+        return usersList;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(@NonNull Parcel parcel, int i) {
+        parcel.writeString(username);
+        parcel.writeString(password);
+        parcel.writeString(email);
+        parcel.writeString(image1);
+        parcel.writeInt(image);
+        parcel.writeString(userID);
+
+        // Write friendsList size
+        if (friendsList != null) {
+            parcel.writeInt(friendsList.size());
+            for (Map<String, String> friend : friendsList) {
+                Bundle friendBundle = new Bundle();
+                for (Map.Entry<String, String> entry : friend.entrySet()) {
+                    friendBundle.putString(entry.getKey(), entry.getValue());
+                }
+                parcel.writeBundle(friendBundle);
+            }
+        } else {
+            parcel.writeInt(0); // friendsList is null or empty
+        }
+    }
+
     enum label{
         PASSWORD,
         USERNAME,

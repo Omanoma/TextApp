@@ -27,9 +27,14 @@ public class Message extends Fragment implements ItemInterface{
     List<User> user;
     String currentUser;
     ImageView icon;
+    User users;
 
+    public Message(User user) {
+        users = user;
+        System.out.println(users.userID);
+        System.out.println(users.friendsList);
+    }
     public Message() {
-        // Required empty public constructor
     }
 
     @Override
@@ -57,10 +62,10 @@ public class Message extends Fragment implements ItemInterface{
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        User a = new User();
-        currentUser = a.getCurrentUser();
+
+        currentUser = users.userID;
         RecyclerView r = view.findViewById(R.id.recycle);
-        CompletableFuture<List<User>> futureUserList = a.getAllContact();
+        CompletableFuture<List<User>> futureUserList = users.getFriendList();
         futureUserList.thenAccept(users -> {
             user = users;
             CardList_Adapter c = new CardList_Adapter(getContext(), user,this);
